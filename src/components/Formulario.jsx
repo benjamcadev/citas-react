@@ -1,6 +1,26 @@
-
+import {useState, useEffect} from 'react';
 
 export const Formulario = () => {
+
+  const [nombre, setNombre] = useState('')
+  const [propietario, setPropietario] = useState('')
+  const [email, setEmail] = useState('')
+  const [fecha, setFecha] = useState('')
+  const [sintomas, setSintomas] = useState('')
+
+  const [error, setError] = useState(false)
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    //Validacion del form
+    if ([ nombre, propietario, email, fecha, sintomas ].includes('')) {
+      setError(true)
+      return
+    }
+
+    setError(false)
+  }
+
   return (
     <div className="md:w-1/2 lg:w-2/5">
       <h2 className="font-black text-3xl text-center">Seguimiento Pacientes</h2>
@@ -9,14 +29,25 @@ export const Formulario = () => {
         Añade Pacientes y {''}
         <span className="text-indigo-600 font-bold">Administralos</span>
       </p>
-      <form className="bg-white shadow-md rounded-md py-10 px-5">
+      <form 
+      onSubmit={handleSubmit}
+      className="bg-white shadow-md rounded-md py-10 px-5 mx-5"
+      >
+          { error &&
+            <div className='bg-red-700 text-white text-center p-3 uppercase font-bold mb-3 rounded-md'>
+              <p>Todos los campos son obligatorios</p>
+            </div>
+          }
 
         <div className="mb-5">
           <label className="block text-gray-700 uppercase font-bold" htmlFor="nombreMascota">Nombre Mascota</label>
           <input className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md" 
           type="text" 
           placeholder="Nombre de la mascota" 
-          id="nombreMascota"/>
+          id="nombreMascota"
+          value={nombre}
+          onChange={ (e) => setNombre(e.target.value) }
+          />
         </div>
 
         <div className="mb-5">
@@ -24,7 +55,10 @@ export const Formulario = () => {
           <input className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md" 
           type="text" 
           placeholder="Nombre del propietario" 
-          id="nombrePropietario"/>
+          id="nombrePropietario"
+          value={propietario}
+          onChange={ (e) => setPropietario(e.target.value) }
+          />
         </div>
 
         <div className="mb-5">
@@ -32,14 +66,20 @@ export const Formulario = () => {
           <input className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md" 
           type="email" 
           placeholder="Email del propietario" 
-          id="email"/>
+          id="email"
+          value={email}
+          onChange={ (e) => setEmail(e.target.value) }
+          />
         </div>
 
         <div className="mb-5">
           <label className="block text-gray-700 uppercase font-bold" htmlFor="email">Alta</label>
           <input className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md" 
           type="date" 
-          id="alta"/>
+          id="alta"
+          value={fecha}
+          onChange={ (e) => setFecha(e.target.value) }
+          />
         </div>
 
         <div className="mb-5">
@@ -48,6 +88,8 @@ export const Formulario = () => {
          id="sintomas"
          className="border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md"
          placeholder="Describe los sintomas"
+         value={sintomas}
+         onChange={ (e) => setSintomas(e.target.value) }
          />
         </div>
 
