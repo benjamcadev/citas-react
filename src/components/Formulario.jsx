@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import Error from './Error';
 
-export const Formulario = ({ setPacientes, pacientes }) => {
+export const Formulario = ({ setPacientes, pacientes, paciente }) => {
 
   const [nombre, setNombre] = useState('')
   const [propietario, setPropietario] = useState('')
@@ -10,6 +10,19 @@ export const Formulario = ({ setPacientes, pacientes }) => {
   const [sintomas, setSintomas] = useState('')
 
   const [error, setError] = useState(false)
+
+  useEffect(() => {
+
+  },[paciente]) // Cuando no hay dependencias el useEffect se ejecuta cuando esta ilsto el componnente, si tiene algo se ejecutara cuano sea modificado esa dependencia
+
+
+
+  const generarId = () => {
+    const random = Math.random().toString(36).substr(2)
+    const fecha = Date.now().toString(36)
+    return random + fecha
+
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -27,7 +40,8 @@ export const Formulario = ({ setPacientes, pacientes }) => {
       propietario,
       email,
       fecha,
-      sintomas
+      sintomas,
+      id: generarId()
     }
 
     setPacientes([...pacientes, objetoPaciente])
