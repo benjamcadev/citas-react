@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react';
 import Error from './Error';
 
-export const Formulario = ({ setPacientes, pacientes, paciente }) => {
+export const Formulario = ({ setPacientes, pacientes, paciente, setPaciente }) => {
 
   const [nombre, setNombre] = useState('')
   const [propietario, setPropietario] = useState('')
@@ -12,7 +12,15 @@ export const Formulario = ({ setPacientes, pacientes, paciente }) => {
   const [error, setError] = useState(false)
 
   useEffect(() => {
-
+    if(Object.keys(paciente).length > 0){ // validando que no este vacio el objeto editar paciente
+     setNombre(paciente.nombre)
+     setPropietario(paciente.propietario)
+     setEmail(paciente.email)
+     setFecha(paciente.fecha)
+     setSintomas(paciente.sintomas)
+    }else{
+      console.log('no hay nada');
+    }
   },[paciente]) // Cuando no hay dependencias el useEffect se ejecuta cuando esta ilsto el componnente, si tiene algo se ejecutara cuano sea modificado esa dependencia
 
 
@@ -41,10 +49,22 @@ export const Formulario = ({ setPacientes, pacientes, paciente }) => {
       email,
       fecha,
       sintomas,
-      id: generarId()
     }
 
-    setPacientes([...pacientes, objetoPaciente])
+    if (paciente.id) {
+      // Editanto paciente
+      objetoPaciente.id = paciente.id
+
+      const pacientesActualizados = pacientes.map(pacienteState => pacienteState.id === paciente.id ? objetoPaciente : pacienteState)
+      setPacientes(pacientesActualizados)
+      setPaciente({})
+    }else{
+      // nuevo registro
+      objetoPaciente.id = generarId()
+      setPacientes([...pacientes, objetoPaciente])
+    }
+
+   
 
     //Reiniciar el form
     setNombre('')
@@ -127,7 +147,7 @@ export const Formulario = ({ setPacientes, pacientes, paciente }) => {
         <input 
         type="submit"
         className="bg-indigo-600 w-full p-3 text-white uppercase font-bold hover:bg-indigo-800 cursor-pointer transition-all"
-        value="Agregar Paciente"
+        value={paciente.id ? 'Editar Paciente' : 'Agregar Paciente'}
         />
 
       </form>
